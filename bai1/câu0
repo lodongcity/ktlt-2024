@@ -1,0 +1,78 @@
+bl_region_type='UI'
+bl_category='Object adder'
+
+def draw(self, context):
+    layout=self.layout
+    #layout.scale_y=1.2
+
+    row=layout.row()
+    row.label(text="add an object",icon='OBJECT_ORIGIN')
+    row=layout.row()
+    row.operator("wm.myop",icon='CUBE',text="cube")
+    row.operator("mesh.primitive_uv_sphere_add",icon='SPHERE',text="sphere")
+    row=layout.row()
+    row=layout.row()
+
+class Shader_PT_panel(bpy.types.panel):
+
+    bl_label="Add Sheder"
+    bl_idname="shader_PT_panel"
+    bl_space_type='VIEW_3D'
+    b1_region_type="UI"
+    bl_category='Object Adder'
+    bl_parent_id='VIEW_PT_MainPanel'
+    bl_options={'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        layout=self.layout
+        layout.operator("addonname.addbasic_operator")
+
+
+class AddShader(bpy.types.Operator):
+    bl_label="Add Basic Shader"
+    bl_idname = "addonname.addbasic_operator"
+
+
+    col: bpy.props.FloattVectorProperty(name="Cloor", subtype='COLOR_GRAMA',side=4,default=(1,0,0,1))
+
+    def execute(self, context):
+
+        material_basic=bpy.data.materials.new(name="Basic")
+        material_basic.use_nodes=True
+
+        principled_node=material_basic.node_tree.nodes.get('principled BSDF')
+        principled_node.inputs[7].default_value=0.08
+
+        rgb_node=material_basic.node_tree.nodes.new("shaderNodeRGB")
+        rgb_node.location=(-250,0)
+        rgb_node.outputs[0].default_value=self.col
+
+        link=material_basic.node_tree.links.new
+        link(rgb_node.outputs[0],principled_node.inputs[0])
+
+        bpy.context.object.active_material=material_basic
+
+    
+    #skapar Klass for underpanelen
+class options(bpy.types.Panel):
+    bl_label="More Options"
+    bl_idname="VIEW_PT_PanelB"
+    bl_space_type='VIEW_3D'
+    bl_region_type='UI'
+    bl_category='Object Adder'
+    bl_parent_id='VIEW_PT_MainPanel'
+    bl_options={'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        layout=self.layout
+
+        row=layout.row()
+        row.label(text="select an option")
+        row=layout.row()
+        row.operator("object.shade_smooth",icon='MOD_SMOOTH',text="Set Smooth Shading")
+        row=layout.row()
+        row.operator("object.subdivision_set",icon='MOD_SUBSURF',text="Add Subsurf")
+        row=layout.now()
+        row.operator("object.modifier_add",icon='MODIFIER')
+                     #skapar flass for pop-up menyn dar namn och scale kan valjas
+class AddCube(bpy.types.Operator):
