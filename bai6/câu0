@@ -1,0 +1,5 @@
+# module_sap_xep.py
+def sap_xep(danh_sach):
+    """Sắp xếp danh sách theo thứ tự tăng dần."""
+    danh_sach.sort()
+    return danh_sach
