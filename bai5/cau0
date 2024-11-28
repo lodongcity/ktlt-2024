@@ -1,0 +1,8 @@
+# module_tim_phan_tu.py
+def tim_lon_nhat(danh_sach):
+    """Tìm phần tử lớn nhất trong danh sách."""
+    return danh_sach[-1]
+
+def tim_nho_nhat(danh_sach):
+    """Tìm phần tử nhỏ nhất trong danh sách."""
+    return danh_sach[0]
